@@ -190,8 +190,8 @@ async function handleDownload() {
     loading.style.display = 'block';
     try {
         const canvas = cropper.getCroppedCanvas({
-            width: 1000,
-            height: 1000,
+            width: 1024,
+            height: 1024,
             imageSmoothingEnabled: true,
             imageSmoothingQuality: 'high'
         });

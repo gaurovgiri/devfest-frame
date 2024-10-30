@@ -1,0 +1,33 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Picture Framer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Profile Picture Framer</h1>
+        
+        <div class="buttons">
+            <input type="file" id="upload" accept="image/*" style="display: none;">
+            <button class="button" onclick="document.getElementById('upload').click()">Upload Image</button>
+            <button class="button" id="downloadBtn" disabled>Download</button>
+        </div>
+
+        <div class="loading">Processing...</div>
+        <div class="error"></div>
+
+        <div class="image-container">
+            <img id="preview" src="">
+            <img id="frame" src="{{ url_for('static', filename='avatar.png') }}">
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

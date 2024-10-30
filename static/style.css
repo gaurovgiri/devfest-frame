@@ -1,0 +1,135 @@
+/* static/style.css */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.image-container {
+    max-width: 500px;
+    margin: 20px auto;
+    position: relative;
+    aspect-ratio: 1;
+    background-color: #f5f5f5;
+    overflow: hidden;
+}
+
+#preview {
+    display: none;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.buttons {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#frame {
+    position: absolute;
+    pointer-events: none;
+    display: none;
+    z-index: 100;
+    transition: opacity 0.2s;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin: 10px 0;
+    display: none;
+    padding: 10px;
+    background-color: #ffe6e6;
+    border-radius: 4px;
+}
+
+/* Cropper.js specific styles */
+.cropper-container {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.cropper-wrap-box {
+    background-color: #f5f5f5;
+}
+
+.cropper-view-box,
+.cropper-face {
+    border-radius: 0;
+}
+
+.cropper-modal {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.cropper-clean-mode .cropper-view-box {
+    outline: none;
+}
+
+.cropper-clean-mode .cropper-modal {
+    opacity: 1;
+    background: white;
+}
+
+.cropper-clean-mode .cropper-drag-box {
+    background: white;
+}
+
+.cropper-view-box {
+    outline: 1px solid #39f;
+    outline-color: rgba(51, 153, 255, 0.75);
+    box-shadow: 0 0 0 1px #39f;
+}
+
+.cropper-face {
+    background-color: transparent !important;
+}
+
+.cropper-dashed {
+    border-color: #39f;
+}
+
+.cropper-center {
+    opacity: 1;
+}
+
+.cropper-center::before,
+.cropper-center::after {
+    background-color: #39f;
+}
+
+
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .image-container {
+        max-width: 100%;
+        margin: 10px auto;
+    }
+    
+    .button {
+        margin: 5px;
+        padding: 8px 16px;
+    }
+}

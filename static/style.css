@@ -85,6 +85,7 @@ body {
     max-width: 100%;
     height: auto;
     margin: var(--spacing-sm) 0;
+    margin-bottom: 0px; /* Remove margin-bottom */
 }
 
 .main {
@@ -157,6 +158,7 @@ body {
 }
 
 .loading {
+    margin-top: var(--spacing-md);
     display: none;
 }
 

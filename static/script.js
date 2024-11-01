@@ -1,4 +1,3 @@
-// static/script.js
 let cropper = null;
 const loading = document.querySelector('.loading');
 const error = document.querySelector('.error');
@@ -40,8 +39,8 @@ async function handleFileUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-        showError('File size should be less than 5MB');
+    if (file.size > 16 * 1024 * 1024) {
+        showError('File size should be less than 16MB');
         return;
     }
 
@@ -229,3 +228,6 @@ async function handleDownload() {
 
 uploadInput.addEventListener('change', handleFileUpload);
 downloadBtn.addEventListener('click', handleDownload);
+
+button.classList.add('loading');
+button.classList.remove('loading');

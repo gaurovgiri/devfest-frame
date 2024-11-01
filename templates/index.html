@@ -4,17 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Picture Framer</title>
+    <title>DevFest 2024</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    
+    <!-- <meta http-equiv="refresh" content="2"> -->
+
 </head>
 <body>
-    <div class="container">
-        <h1>Profile Picture Framer</h1>
-        
+    <div id="title">
+        <img src="{{ url_for('static', filename='images/gdg_ktm.png' )}}" alt="GDG Kathmandu Logo">
+
+        <h3 style="font-weight: normal;">presents</h3>
+
+        <h1 id="devfest">DevFest 2024</h1>
+
+        <img src="{{ url_for('static', filename='images/separator.png' )}}" alt="separator"> 
+    </div>
+
+    <div id="description">
+        <h3 style="font-size: 2rem;">
+            Get your DevFest Profile Frame
+        </h3>
+        <p style="font-size: 1.1rem; color:gray; font-weight:normal;">
+            Upload your image, adjust the frame and
+            <br>Share your excitement on Social Media
+        </p>
+    </div>
+
+    <div id="container">
         <div class="buttons">
             <input type="file" id="upload" accept="image/*" style="display: none;">
-            <button class="button" onclick="document.getElementById('upload').click()">Upload Image</button>
+            <button class="button" onclick="document.getElementById('upload').click()">Upload</button>
             <button class="button" id="downloadBtn" disabled>Download</button>
         </div>
 
@@ -23,8 +44,17 @@
 
         <div class="image-container">
             <img id="preview" src="">
+
             <img id="frame" src="{{ url_for('static', filename='avatar.png') }}">
         </div>
+
+    </div>
+
+    <div id="footer">
+        <p style="color: gray; margin-bottom: 0.5rem">Don't know about GDG Kathmandu or DevFest?</p>
+        <button class="button" style="background-color: #F9E6AB; color:black">
+            Know More
+        </button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>

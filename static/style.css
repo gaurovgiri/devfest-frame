@@ -1,3 +1,59 @@
+/* =========================================================================
+   Custom Properties
+   ========================================================================= */
+   :root {
+    /* Colors */
+    --color-primary: #4285F4;
+    --color-success: #34A853;
+    --color-error: #EA4335;
+    --color-warning: #FBBC04;
+    --color-background: #F2F2F0;
+    --color-border: #0f0f0f;
+    --color-text: #0f0f0f;
+    --color-text-light: #666;
+    --color-placeholder: #D9D9D9;
+    
+    /* Gradient */
+    --gradient-brand: linear-gradient(
+        90deg,
+        var(--color-error) 0%,
+        var(--color-warning) 25%,
+        var(--color-success) 50%,
+        var(--color-primary) 75%
+    );
+    
+    /* Spacing */
+    --spacing-xxs: 0.25rem;   /* 4px */
+    --spacing-xs: 0.5rem;     /* 8px */
+    --spacing-sm: 1rem;       /* 16px */
+    --spacing-md: 1.5rem;     /* 24px */
+    --spacing-lg: 2rem;       /* 32px */
+    --spacing-xl: 3rem;       /* 48px */
+    
+    /* Layout */
+    --container-width: 500px;
+    --border-radius-sm: 5px;
+    --border-radius-md: 10px;
+    --border-radius-lg: 20px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-button: 5px 6px 0 0 var(--color-border);
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    
+    /* Z-index layers */
+    --z-base: 1;
+    --z-above: 2;
+    --z-frame: 100;
+}
+
+/* =========================================================================
+   Font Face Declarations
+   ========================================================================= */
 @font-face {
     font-family: 'Product Sans';
     src: url("/static/fonts/Product Sans Regular.ttf") format('truetype');
@@ -14,30 +70,43 @@
     font-display: swap;
 }
 
-:root {
-    --color-primary: #4285F4;
-    --color-success: #34A853;
-    --color-error: #EA4335;
-    --color-warning: #FBBC04;
-    --color-background: #F2F2F0;
-    --color-border: #0f0f0f;
-    --spacing-xs: 0.5rem;
-    --spacing-sm: 1rem;
-    --spacing-md: 1.5rem;
-    --spacing-lg: 2rem;
-    --border-radius: 20px;
-    --container-width: 500px;
+@font-face {
+    font-family: 'Product Sans';
+    src: url("/static/fonts/Product Sans Italic.ttf") format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
 }
 
+@font-face {
+    font-family: 'Product Sans';
+    src: url("/static/fonts/Product Sans Bold Italic.ttf") format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* =========================================================================
+   Base Styles
+   ========================================================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 body {
     font-family: 'Product Sans', system-ui, -apple-system, sans-serif;
     background-color: var(--color-background);
+    color: var(--color-text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -45,6 +114,15 @@ body {
     padding: var(--spacing-sm);
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* =========================================================================
+   Header Styles
+   ========================================================================= */
 .header {
     text-align: center;
     padding: var(--spacing-sm) 0;
@@ -54,23 +132,19 @@ body {
 
 .logo {
     max-width: 200px;
-    height: auto;
+    margin: 0 auto;
 }
 
 .presents {
     font-weight: normal;
     margin: var(--spacing-xs) 0;
+    color: var(--color-text-light);
 }
 
 .title {
     font-size: clamp(2rem, 8vw, 4.5rem);
     font-weight: bold;
-    background: linear-gradient(90deg, 
-        var(--color-error) 0%,
-        var(--color-warning) 25%,
-        var(--color-success) 50%,
-        var(--color-primary) 75%
-    );
+    background: var(--gradient-brand);
     background-size: 200% auto;
     color: transparent;
     -webkit-background-clip: text;
@@ -78,16 +152,22 @@ body {
     line-height: 1.1;
     letter-spacing: -0.02em;
     animation: shine 8s linear infinite;
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-normal);
+}
+
+.title:hover {
+    transform: scale(1.02);
+    cursor: pointer;
 }
 
 .separator {
-    max-width: 100%;
-    height: auto;
-    margin: var(--spacing-sm) 0;
-    margin-bottom: 0px; /* Remove margin-bottom */
+    margin: var(--spacing-sm) auto;
+    opacity: 0.8;
 }
 
+/* =========================================================================
+   Main Content
+   ========================================================================= */
 .main {
     width: 100%;
     max-width: var(--container-width);
@@ -100,21 +180,98 @@ body {
 
 .description h2 {
     font-size: clamp(1.5rem, 4vw, 2rem);
-    margin-bottom: 10px
+    margin-bottom: var(--spacing-sm);
 }
 
+/* =========================================================================
+   Frame Creator Section
+   ========================================================================= */
 .frame-creator {
     border: 2px solid var(--color-border);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-lg);
     padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    background-color: white;
+}
+
+/* =========================================================================
+   Frame Selector
+   ========================================================================= */
+.frame-selector {
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+}
+
+.frame-selector-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-border);
+}
+
+.frame-options {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
     margin-bottom: var(--spacing-md);
 }
 
+.frame-option {
+    cursor: pointer;
+    position: relative;
+}
+
+.frame-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.frame-option-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-normal);
+}
+
+.frame-option input[type="radio"]:checked + .frame-option-content {
+    border-color: var(--color-primary);
+    background-color: rgba(66, 133, 244, 0.1);
+}
+
+.frame-option input[type="radio"]:focus-visible + .frame-option-content {
+    box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.frame-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+}
+
+.frame-option:hover .frame-preview {
+    transform: scale(1.05);
+}
+
+.frame-label {
+    font-weight: bold;
+    color: var(--color-border);
+}
+
+/* =========================================================================
+   Button Styles
+   ========================================================================= */
 .button-group {
     display: flex;
     justify-content: center;
     gap: var(--spacing-lg);
-    /* margin-bottom: 10px; */
+    margin-bottom: var(--spacing-sm);
 }
 
 .hidden {
@@ -125,13 +282,13 @@ body {
     padding: 0.625rem 1.25rem;
     color: white;
     border: 1px solid var(--color-border);
-    border-radius: 5px;
+    border-radius: var(--border-radius-sm);
     cursor: pointer;
     font-size: 1.25rem;
     font-weight: bold;
     font-family: inherit;
-    box-shadow: 5px 6px 0 0 var(--color-border);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow-button);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .btn:active {
@@ -150,33 +307,53 @@ body {
 .btn-download:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+    opacity: 0.7;
 }
 
+/* =========================================================================
+   Status Messages
+   ========================================================================= */
 .status-messages {
     min-height: 40px;
     text-align: center;
 }
 
 .loading {
-    margin-top: var(--spacing-md);
     display: none;
+    color: var(--color-primary);
+    font-weight: bold;
 }
 
 .error {
     display: none;
     color: var(--color-error);
     padding: var(--spacing-xs);
-    background-color: #ffe6e6;
-    border-radius: 4px;
+    background-color: rgba(234, 67, 53, 0.1);
+    border-radius: var(--border-radius-sm);
 }
 
+/* =========================================================================
+   Image Container
+   ========================================================================= */
 .image-container {
     width: 100%;
     aspect-ratio: 1;
     position: relative;
     overflow: hidden;
-    border-radius: var(--border-radius);
-    background: #D9D9D9;
+    border-radius: var(--border-radius-lg);
+    background: var(--color-placeholder);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-container::before {
+    content: 'Upload your photo';
+    color: var(--color-text-light);
+    font-size: 1.2rem;
+    position: absolute;
+    z-index: var(--z-base);
 }
 
 #preview {
@@ -184,6 +361,8 @@ body {
     height: 100%;
     object-fit: cover;
     display: none;
+    position: relative;
+    z-index: var(--z-above);
 }
 
 #frame {
@@ -193,29 +372,51 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    display: none;
-    z-index: 100;
+    display: block;
+    z-index: var(--z-frame);
+    opacity: 0.9;
+    transition: opacity var(--transition-normal);
 }
 
+.image-uploaded #frame {
+    opacity: 1;
+}
+
+.image-uploaded::before {
+    display: none;
+}
+
+/* =========================================================================
+   Footer
+   ========================================================================= */
 .footer {
     text-align: center;
     padding: var(--spacing-sm);
+    color: var(--color-text-light);
 }
 
 .link {
     color: var(--color-primary);
     text-decoration: none;
     font-weight: bold;
+    transition: color var(--transition-fast);
 }
 
 .link:hover {
     text-decoration: underline;
+    color: var(--color-text);
 }
 
-/* Cropper.js customization */
+/* =========================================================================
+   Cropper.js Customization
+   ========================================================================= */
 .cropper-container {
     width: 100% !important;
     height: 100% !important;
+}
+
+.cropper-wrap-box {
+    background-color: #f5f5f5;
 }
 
 .cropper-view-box,
@@ -250,19 +451,37 @@ body {
     background-color: transparent !important;
 }
 
+/* =========================================================================
+   Animations
+   ========================================================================= */
 @keyframes shine {
     to {
         background-position: 200% center;
     }
 }
 
-/* Responsive breakpoints */
+/* =========================================================================
+   Media Queries
+   ========================================================================= */
 @media (max-width: 480px) {
     :root {
         --spacing-lg: 1.5rem;
         --spacing-md: 1rem;
         --spacing-sm: 0.75rem;
         --spacing-xs: 0.375rem;
+    }
+
+    .frame-options {
+        gap: var(--spacing-sm);
+    }
+
+    .frame-preview {
+        width: 80px;
+        height: 80px;
+    }
+
+    .frame-label {
+        font-size: 0.9rem;
     }
 
     .button-group {
@@ -272,5 +491,45 @@ body {
     .btn {
         padding: 0.5rem 1rem;
         font-size: 1rem;
+    }
+
+    .image-container::before {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .frame-creator {
+        padding: var(--spacing-xs);
+    }
+
+    .description {
+        padding: var(--spacing-md) var(--spacing-xs);
+    }
+}
+
+@media (hover: none) {
+    .title:hover {
+        transform: none;
+    }
+
+    .frame-option:hover .frame-preview {
+        transform: none;
+    }
+}
+
+/* =========================================================================
+   Print Styles
+   ========================================================================= */
+@media print {
+    .btn,
+    .frame-selector,
+    .footer {
+        display: none;
+    }
+
+    .image-container {
+        border: none;
+        box-shadow: none;
     }
 }

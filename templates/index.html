@@ -6,7 +6,6 @@
     <title>DevFest 2024 - Profile Frame Creator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 <body>
     <header class="header">
@@ -19,10 +18,30 @@
     <main class="main">
         <section class="description">
             <h2>Get your DevFest Profile Frame</h2>
-            <p>Upload your image, adjust the frame <br> and Share your excitement on Social Media</p>
+            <p>Upload your image, adjust the frame and Share your excitement on Social Media</p>
         </section>
 
         <section class="frame-creator">
+            <div class="frame-selector">
+                <h3 class="frame-selector-title">Select Your Frame</h3>
+                <div class="frame-options">
+                    <label class="frame-option">
+                        <input type="radio" name="frameType" value="participant" checked>
+                        <span class="frame-option-content">
+                            <img src="{{ url_for('static', filename='avatar-participant.png') }}" alt="Participant Frame Preview" class="frame-preview">
+                            <span class="frame-label">Participant</span>
+                        </span>
+                    </label>
+                    <label class="frame-option">
+                        <input type="radio" name="frameType" value="organizer">
+                        <span class="frame-option-content">
+                            <img src="{{ url_for('static', filename='avatar-organizer.png') }}" alt="Organizer Frame Preview" class="frame-preview">
+                            <span class="frame-label">Organizer</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
             <div class="button-group">
                 <input type="file" id="upload" accept="image/*" class="hidden">
                 <label for="upload" class="btn btn-upload">Upload</label>
@@ -36,7 +55,7 @@
 
             <div class="image-container">
                 <img id="preview" alt="Preview">
-                <img src="{{ url_for('static', filename='avatar.png') }}" alt="Frame" id="frame">
+                <img src="{{ url_for('static', filename='avatar-participant.png') }}" alt="Frame" id="frame">
             </div>
         </section>
     </main>

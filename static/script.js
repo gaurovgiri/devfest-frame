@@ -1,35 +1,151 @@
+/**
+ * DevFest Profile Frame Creator
+ * A class to handle image upload, frame selection, cropping, and downloading functionality
+ * for the DevFest profile picture frame creator.
+ */
 class FrameCreator {
+    /**
+     * Initialize the frame creator with all necessary elements and configurations
+     */
     constructor() {
-        this.cropper = null;
-        this.loading = document.querySelector('.loading');
-        this.error = document.querySelector('.error');
-        this.preview = document.getElementById('preview');
-        this.frame = document.getElementById('frame');
-        this.uploadInput = document.getElementById('upload');
-        this.downloadBtn = document.getElementById('downloadBtn');
+        // DOM Elements
+        this.elements = {
+            loading: document.querySelector('.loading'),
+            error: document.querySelector('.error'),
+            preview: document.getElementById('preview'),
+            frame: document.getElementById('frame'),
+            uploadInput: document.getElementById('upload'),
+            downloadBtn: document.getElementById('downloadBtn'),
+            frameOptions: document.querySelectorAll('input[name="frameType"]'),
+            imageContainer: document.querySelector('.image-container')
+        };
 
+        // Cropper instance
+        this.cropper = null;
+
+        // Constants
+        this.constants = {
+            MAX_FILE_SIZE: 16 * 1024 * 1024, // 16MB
+            VALID_TYPES: ['image/jpeg', 'image/png', 'image/jpg'],
+            FRAME_PATHS: {
+                participant: '/static/avatar-participant.png',
+                organizer: '/static/avatar-organizer.png'
+            },
+            CROP_DIMENSIONS: {
+                width: 1024,
+                height: 1024
+            },
+            ERROR_DURATION: 3000,
+            CROP_OPTIONS: {
+                aspectRatio: 1,
+                viewMode: 3,
+                dragMode: 'move',
+                autoCropArea: 1,
+                restore: false,
+                guides: true,
+                center: true,
+                highlight: false,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                toggleDragModeOnDblclick: false,
+                background: true,
+                responsive: true,
+                checkOrientation: true,
+                minContainerWidth: 100,
+                minContainerHeight: 100,
+                zoomOnWheel: true,
+                wheelZoomRatio: 0.1
+            }
+        };
+
+        // Initialize the frame creator
         this.init();
     }
 
+    /**
+     * Initialize frame display and event listeners
+     */
     init() {
-        this.uploadInput.addEventListener('change', this.handleFileUpload.bind(this));
-        this.downloadBtn.addEventListener('click', this.handleDownload.bind(this));
+        // Show initial frame and setup listeners
+        this.initializeFrame();
+        this.bindEventListeners();
     }
 
-    showError(message, duration = 3000) {
-        this.error.textContent = message;
-        this.error.style.display = 'block';
+    /**
+     * Initialize the frame with default selection
+     */
+    initializeFrame() {
+        this.setFrameType('participant');
+    }
+
+    /**
+     * Bind all necessary event listeners
+     */
+    bindEventListeners() {
+        this.elements.uploadInput.addEventListener('change', this.handleFileUpload.bind(this));
+        this.elements.downloadBtn.addEventListener('click', this.handleDownload.bind(this));
+        this.elements.frameOptions.forEach(option => {
+            option.addEventListener('change', this.handleFrameChange.bind(this));
+        });
+    }
+
+    /**
+     * Display error message to user
+     * @param {string} message - Error message to display
+     * @param {number} duration - Duration to show error message
+     */
+    showError(message, duration = this.constants.ERROR_DURATION) {
+        const { error } = this.elements;
+        error.textContent = message;
+        error.style.display = 'block';
         setTimeout(() => {
-            this.error.style.display = 'none';
+            error.style.display = 'none';
         }, duration);
     }
 
+    /**
+     * Toggle loading state
+     * @param {boolean} show - Whether to show or hide loading indicator
+     */
+    toggleLoading(show) {
+        this.elements.loading.style.display = show ? 'block' : 'none';
+    }
+
+    /**
+     * Set frame type and update display
+     * @param {string} frameType - Type of frame to display
+     */
+    setFrameType(frameType) {
+        const framePath = this.constants.FRAME_PATHS[frameType];
+        if (framePath) {
+            this.elements.frame.src = framePath;
+            this.elements.frame.style.display = 'block';
+        }
+    }
+
+    /**
+     * Handle frame type change event
+     * @param {Event} e - Change event from frame type radio buttons
+     */
+    handleFrameChange(e) {
+        const frameType = e.target.value;
+        this.setFrameType(frameType);
+        
+        if (this.cropper) {
+            this.updateFramePosition();
+        }
+    }
+
+    /**
+     * Update frame position based on crop box
+     */
     updateFramePosition() {
-        if (!this.cropper || !this.frame) return;
+        const { frame } = this.elements;
+        if (!this.cropper || !frame) return;
 
         try {
             const cropBoxData = this.cropper.getCropBoxData();
-            Object.assign(this.frame.style, {
+            Object.assign(frame.style, {
                 width: `${cropBoxData.width}px`,
                 height: `${cropBoxData.height}px`,
                 left: `${cropBoxData.left}px`,
@@ -43,45 +159,40 @@ class FrameCreator {
         }
     }
 
+    /**
+     * Initialize and setup the cropper instance
+     * @param {HTMLImageElement} img - Image element to crop
+     */
     setupCropper(img) {
-        this.preview.src = img.src;
-        this.preview.style.display = 'block';
+        const { preview, downloadBtn, frame, imageContainer } = this.elements;
+        
+        // Setup preview image
+        preview.src = img.src;
+        preview.style.display = 'block';
+        imageContainer.classList.add('image-uploaded');
 
+        // Destroy existing cropper if any
         if (this.cropper) {
             this.cropper.destroy();
         }
 
-        this.cropper = new Cropper(this.preview, {
-            aspectRatio: 1,
-            viewMode: 3,
-            dragMode: 'move',
-            autoCropArea: 1,
-            restore: false,
-            guides: true,
-            center: true,
-            highlight: false,
-            cropBoxMovable: true,
-            cropBoxResizable: true,
-            toggleDragModeOnDblclick: false,
-            background: true,
-            responsive: true,
-            checkOrientation: true,
-            minContainerWidth: 100,
-            minContainerHeight: 100,
-            zoomOnWheel: true,
-            wheelZoomRatio: 0.1,
+        // Create new cropper instance with custom configuration
+        this.cropper = new Cropper(preview, {
+            ...this.constants.CROP_OPTIONS,
             ready: () => {
-                this.downloadBtn.disabled = false;
-                this.frame.style.display = 'block';
+                downloadBtn.disabled = false;
+                frame.style.opacity = '1';
                 
                 const containerData = this.cropper.getContainerData();
                 const imageData = this.cropper.getImageData();
                 
+                // Calculate optimal initial zoom
                 const scale = Math.min(
                     containerData.width / imageData.naturalWidth,
                     containerData.height / imageData.naturalHeight
                 );
                 
+                // Center and zoom the image
                 this.cropper.zoomTo(scale);
                 this.cropper.moveTo(
                     (containerData.width - imageData.width * scale) / 2,
@@ -93,12 +204,12 @@ class FrameCreator {
             },
             cropstart: () => {
                 this.cropper.container.classList.remove('cropper-clean-mode');
-                this.frame.style.opacity = '0.8';
+                frame.style.opacity = '0.8';
             },
             cropmove: () => this.updateFramePosition(),
             cropend: () => {
                 this.cropper.container.classList.add('cropper-clean-mode');
-                this.frame.style.opacity = '1';
+                frame.style.opacity = '1';
                 this.updateFramePosition();
             },
             zoom: () => this.updateFramePosition()
@@ -107,6 +218,9 @@ class FrameCreator {
         this.setupEventListeners();
     }
 
+    /**
+     * Setup performance-optimized event listeners for frame updates
+     */
     setupEventListeners() {
         let ticking = false;
         const updateFrame = () => {
@@ -119,26 +233,41 @@ class FrameCreator {
             }
         };
 
+        // Add event listeners with passive flag for better performance
         document.addEventListener('mousemove', updateFrame, { passive: true });
         document.addEventListener('touchmove', updateFrame, { passive: true });
     }
 
+    /**
+     * Validate uploaded file
+     * @param {File} file - File to validate
+     * @returns {boolean} Whether file is valid
+     */
+    validateFile(file) {
+        if (!file) return false;
+
+        if (file.size > this.constants.MAX_FILE_SIZE) {
+            this.showError('File size should be less than 16MB');
+            return false;
+        }
+
+        if (!this.constants.VALID_TYPES.includes(file.type)) {
+            this.showError('Please upload a valid image file (JPEG or PNG)');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Handle file upload event
+     * @param {Event} e - Change event from file input
+     */
     async handleFileUpload(e) {
         const file = e.target.files[0];
-        if (!file) return;
+        if (!this.validateFile(file)) return;
 
-        if (file.size > 16 * 1024 * 1024) {
-            this.showError('File size should be less than 16MB');
-            return;
-        }
-
-        const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-        if (!validTypes.includes(file.type)) {
-            this.showError('Please upload a valid image file (JPEG or PNG)');
-            return;
-        }
-
-        this.loading.style.display = 'block';
+        this.toggleLoading(true);
         const formData = new FormData();
         formData.append('file', file);
 
@@ -166,41 +295,54 @@ class FrameCreator {
             console.error('Upload error:', err);
             this.showError('Upload failed: ' + (err.message || 'Unknown error'));
         } finally {
-            this.loading.style.display = 'none';
+            this.toggleLoading(false);
         }
     }
 
+    /**
+     * Get current frame type selection
+     * @returns {string} Selected frame type
+     */
+    getSelectedFrameType() {
+        const selectedFrame = document.querySelector('input[name="frameType"]:checked');
+        return selectedFrame ? selectedFrame.value : 'participant';
+    }
+
+    /**
+     * Handle image download
+     */
     async handleDownload() {
         if (!this.cropper) return;
 
-        this.loading.style.display = 'block';
+        this.toggleLoading(true);
         try {
             const canvas = this.cropper.getCroppedCanvas({
-                width: 1024,
-                height: 1024,
+                ...this.constants.CROP_DIMENSIONS,
                 imageSmoothingEnabled: true,
                 imageSmoothingQuality: 'high'
             });
             
             const imageData = canvas.toDataURL('image/jpeg', 1.0);
+            const frameType = this.getSelectedFrameType();
 
             const response = await fetch('/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ imageData })
+                body: JSON.stringify({ imageData, frameType })
             });
 
             if (!response.ok) {
                 throw new Error('Generation failed');
             }
 
+            // Handle successful download
             const blob = await response.blob();
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'devfest_profile_frame.jpg';
+            a.download = `devfest_${frameType}_frame.jpg`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -209,12 +351,31 @@ class FrameCreator {
             console.error('Generation error:', err);
             this.showError('Failed to generate image');
         } finally {
-            this.loading.style.display = 'none';
+            this.toggleLoading(false);
         }
+    }
+
+    /**
+     * Clean up resources
+     */
+    destroy() {
+        if (this.cropper) {
+            this.cropper.destroy();
+        }
+        // Remove event listeners
+        document.removeEventListener('mousemove', this.updateFramePosition);
+        document.removeEventListener('touchmove', this.updateFramePosition);
     }
 }
 
-// Initialize the app
+// Initialize the app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    new FrameCreator();
+    window.frameCreator = new FrameCreator();
+});
+
+// Clean up on page unload
+window.addEventListener('unload', () => {
+    if (window.frameCreator) {
+        window.frameCreator.destroy();
+    }
 });

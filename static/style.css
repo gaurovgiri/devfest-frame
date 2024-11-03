@@ -1,3 +1,8 @@
+/*
+    Font: Product Sans
+*/
+@import url('https://fonts.googleapis.com/css2?family=Product+Sans:wght@400;700&display=swap');
+
 /* =========================================================================
    Custom Properties
    ========================================================================= */
@@ -52,41 +57,6 @@
 }
 
 /* =========================================================================
-   Font Face Declarations
-   ========================================================================= */
-@font-face {
-    font-family: 'Product Sans';
-    src: url("/static/fonts/Product Sans Regular.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Product Sans';
-    src: url("/static/fonts/Product Sans Bold.ttf") format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Product Sans';
-    src: url("/static/fonts/Product Sans Italic.ttf") format('truetype');
-    font-weight: normal;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Product Sans';
-    src: url("/static/fonts/Product Sans Bold Italic.ttf") format('truetype');
-    font-weight: bold;
-    font-style: italic;
-    font-display: swap;
-}
-
-/* =========================================================================
    Base Styles
    ========================================================================= */
 * {
@@ -104,7 +74,7 @@ html {
 }
 
 body {
-    font-family: 'Product Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Product Sans', 'Google Sans', system-ui, -apple-system, sans-serif;
     background-color: var(--color-background);
     color: var(--color-text);
     min-height: 100vh;
